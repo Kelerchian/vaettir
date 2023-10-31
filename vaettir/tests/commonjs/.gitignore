@@ -1,0 +1,3 @@
+/*.ts
+/*.tsx
+!jest.config.ts

@@ -1,0 +1,17 @@
+{
+  "name": "vaettir-suite",
+  "scripts": {
+    "ci-all": "npm run ci:vaettir && npm run ci:vaettir-react",
+    "ci:vaettir": "cd vaettir && npm ci",
+    "ci:vaettir-react": "cd vaettir-react && npm ci",
+    "build-all": "npm run build:vaettir && npm run build:vaettir-react",
+    "build:vaettir": "cd vaettir && npm run clean && npm run build && npm run test",
+    "build:vaettir-react": "cd vaettir-react && npm run clean && npm run build && npm run test",
+    "link": "npm run link:vaettir && npm run link:to:vaettir",
+    "link:vaettir": "cd vaettir && npm link",
+    "link:to:vaettir": "cd vaettir-react && npm link vaettir",
+    "unlink": "npm run unlink:vaettir && npm run unlink:to:vaettir",
+    "unlink:vaettir": "npm unlink vaettir",
+    "unlink:to:vaettir": "cd vaettir-react && npm install"
+  }
+}
