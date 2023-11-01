@@ -55,10 +55,10 @@ export namespace Vaettir {
     Channels extends DefaultChannels,
   > = {
     api: <NewAPI extends DefaultAPI>(
-      fn: (input: AgentAPIDefinerParam<API, Channels>) => NewAPI
+      fn: (input: AgentAPIDefinerParam<API, Channels>) => NewAPI,
     ) => AgentBuilder<NewAPI, Channels>;
     channels: <NewChannels extends Channels>(
-      fn: (channels: Channels) => NewChannels
+      fn: (channels: Channels) => NewChannels,
     ) => AgentBuilder<API, NewChannels>;
     id: (id: string) => AgentBuilder<API, Channels>;
     finish: () => Vaettir<API, Channels>;
@@ -68,16 +68,19 @@ export namespace Vaettir {
     API extends DefaultAPI,
     Channels extends DefaultChannels,
   >(
-    prototype: AgentPrototype<API, Channels>
+    prototype: AgentPrototype<API, Channels>,
   ): AgentBuilder<API, Channels> => {
-    const finish = (): Vaettir<API, Channels> => ({
-      id: prototype.idCont.lazyGet(),
-      api: prototype.api,
-      channels: prototype.channels,
-      destroy: prototype.destruction.destroy,
-      isDestroyed: prototype.destruction.isDestroyed,
-      whenDestroyed: prototype.destruction.whenDestroyed,
-    });
+    const finish = (): Vaettir<API, Channels> => {
+      prototype.destruction.onDestroy(prototype.channels.change.emit);
+      return {
+        id: prototype.idCont.lazyGet(),
+        api: prototype.api,
+        channels: prototype.channels,
+        destroy: prototype.destruction.destroy,
+        isDestroyed: prototype.destruction.isDestroyed,
+        whenDestroyed: prototype.destruction.whenDestroyed,
+      };
+    };
 
     const channels: AgentBuilder<API, Channels>["channels"] = (fn) =>
       makeBuilderImpl({

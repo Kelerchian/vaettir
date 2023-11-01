@@ -62,3 +62,14 @@ it("should support behave the same as systemic-ts-utils/destruction", async () =
   expect(firstAgent.isDestroyed()).toBe(true);
   expect(destroyFlag).toBe(1);
 });
+
+it("should emit change on destruction", async () => {
+  let changeFlag = 0;
+  const firstAgent = Vaettir.build().finish();
+  firstAgent.channels.change.sub(() => {
+    changeFlag += 1;
+  });
+
+  firstAgent.destroy();
+  expect(changeFlag).toBe(1);
+});
