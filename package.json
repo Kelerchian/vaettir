@@ -1,17 +1,21 @@
 {
   "name": "vaettir-suite",
   "scripts": {
-    "ci-all": "npm run ci:vaettir && npm run ci:vaettir-react",
+    "dist": "npm run ci-all && concurrently \"npm:dist:vaettir\" \"npm:dist:vaettir-react\" && npm run test",
+    "ci-all": "concurrently \"npm:ci:vaettir\" \"npm:ci:vaettir-react\"",
     "ci:vaettir": "cd vaettir && npm ci",
     "ci:vaettir-react": "cd vaettir-react && npm ci",
-    "build-all": "npm run build:vaettir && npm run build:vaettir-react",
-    "build:vaettir": "cd vaettir && npm run clean && npm run build && npm run test",
-    "build:vaettir-react": "cd vaettir-react && npm run clean && npm run build && npm run test",
-    "link": "npm run link:vaettir && npm run link:to:vaettir",
-    "link:vaettir": "cd vaettir && npm link",
-    "link:to:vaettir": "cd vaettir-react && npm link vaettir",
-    "unlink": "npm run unlink:vaettir && npm run unlink:to:vaettir",
-    "unlink:vaettir": "npm unlink vaettir",
-    "unlink:to:vaettir": "cd vaettir-react && npm install"
+    "dist:vaettir": "cd vaettir && npm run dist",
+    "dist:vaettir-react": "cd vaettir-react && npm run dist",
+    "test": "npm run test:prepare && npm run test:run",
+    "test:prepare": "concurrently \"npm:test:prepare:esm\" \"npm:test:prepare:commonjs\"",
+    "test:prepare:esm": "cd dist-tests/esm && npm ci",
+    "test:prepare:commonjs": "cd dist-tests/commonjs && npm ci",
+    "test:run": "concurrently \"npm:test:run:esm\" \"npm:test:run:commonjs\"",
+    "test:run:esm": "cd dist-tests/esm && npm run test",
+    "test:run:commonjs": "cd dist-tests/commonjs && npm run test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

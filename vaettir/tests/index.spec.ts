@@ -1,5 +1,5 @@
-import { Vaettir, Obs } from "../../dist/esm/index.js";
-import { it, expect, describe } from "@jest/globals";
+import { Vaettir, Obs } from "../src/index.js";
+import { it, expect } from "@jest/globals";
 
 it("should have unique id", () => {
   const firstAgent = Vaettir.build()

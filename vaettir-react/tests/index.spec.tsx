@@ -7,7 +7,7 @@ import * as React from "react";
 import { sleep } from "systemic-ts-utils/async-utils";
 import { it, expect, describe, beforeEach } from "@jest/globals";
 import { act, render, screen, fireEvent } from "@testing-library/react";
-import { Vaettir, Obs, VaettirReact } from "../../dist/esm/index.js";
+import { Vaettir, VaettirReact } from "../src/index.js";
 
 describe("VaettirReact.use", () => {
   type Agent = ReturnType<typeof Agent>;

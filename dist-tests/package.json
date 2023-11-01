@@ -1,0 +1,20 @@
+{
+  "name": "dist-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test:prepare && npm run test:run",
+    "test:prepare": "concurrently \"npm:test:prepare:esm\" \"npm:test:prepare:commonjs\"",
+    "test:prepare:esm": "cd esm && npm ci",
+    "test:prepare:commonjs": "cd commonjs && npm ci",
+    "test:run": "concurrently \"npm:test:run:esm\" \"npm:test:run:commonjs\"",
+    "test:run:esm": "cd esm && npm run test",
+    "test:run:commonjs": "cd commonjs && npm run test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -3,41 +3,30 @@
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/commonjs/index.js",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/index.d.ts",
-        "default": "./dist/commonjs/index.js"
-      }
-    }
-  },
   "files": [
     "dist"
   ],
   "scripts": {
+    "dev:prepare": "cd ../vaettir && npm link && npm run clean && npm ci && npm run build",
+    "dev:unlink": "npm unlink vaettir && npm install",
+    "dist": "npm run clean && npm run build && npm run test",
     "build": "tshy",
-    "clean": "npm run clean:dist && npm run test:commonjs:clean",
-    "clean:dist": "rimraf ./dist",
-    "test": "npm run test:esm && npm run test:commonjs",
-    "test:esm": "cd ./tests/esm && cross-env NODE_OPTIONS=--experimental-vm-modules jest --config=./jest.config.ts",
-    "test:commonjs": "npm run test:commonjs:clean && npm run test:commonjs:copy && cd tests/commonjs && jest --config=./tests/commonjs/jest.config.ts",
-    "test:commonjs:copy": "ts-node-esm scripts/test/commonjs-copy.ts",
-    "test:commonjs:clean": "ts-node-esm scripts/test/commonjs-remove.ts",
+    "clean": "rimraf ./dist",
+    "test": "jest",
     "lint": "npx eslint src/**/*.ts",
     "lint:strict": "npm run lint -- --max-warnings 0",
     "lint:fix": "npm run lint -- --fix",
-    "prepublishOnly": "npm run clean && npm run build && npm run test && npm run lint"
+    "prepublishOnly": "npm run dist"
   },
   "author": "",
   "license": "MIT",
   "description": "",
   "peerDependencies": {
     "react": "^18.2.0"
+  },
+  "dependencies": {
+    "systemic-ts-utils": "^0.2.1",
+    "vaettir": "^0.1.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
@@ -63,9 +52,18 @@
       ".": "./src/index.ts"
     }
   },
-  "types": "./dist/commonjs/index.d.ts",
-  "dependencies": {
-    "systemic-ts-utils": "^0.2.1",
-    "vaettir": "^0.1.0"
-  }
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
+  },
+  "types": "./dist/commonjs/index.d.ts"
 }
