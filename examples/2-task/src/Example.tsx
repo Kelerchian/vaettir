@@ -28,8 +28,8 @@ const Agent = () =>
             data.rot += increment;
             data.rot = data.rot % top;
             channels.change.emit();
-            // ...every 100 milliseconds
-            await sleep(10);
+            // ...every 1000/60 milliseconds (roughly 60fps)
+            await sleep(Math.round(1000 / 60));
           }
         });
 
@@ -71,11 +71,17 @@ const Parent = () => {
         which starts an internal process that keeps running until the agent is
         destroyed (click the button below).
       </p>
-      {JSON.stringify({
-        ...agent.api.getRGB(),
-        destroyed: agent.isDestroyed(),
-      })}
       <RGB agent={agent} />
+      <pre>
+        {JSON.stringify(
+          {
+            ...agent.api.getRGB(),
+            destroyed: agent.isDestroyed(),
+          },
+          null,
+          2,
+        )}
+      </pre>
       <button
         disabled={agent.isDestroyed()}
         onClick={() => {
