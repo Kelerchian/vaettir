@@ -63,7 +63,10 @@ const Root = React.memo(() => {
           Channels can carries payload of a certain type. For example, channel 2
           carries string, which is captured by the component that listens to it.
         </p>
-        <p>Channel 3 is internally triggered by an async loop as long as the agent is alive</p>
+        <p>
+          Channel 3 is internally triggered by an async loop as long as the
+          agent is alive
+        </p>
       </ColoredBox>
       <Channel1 agent={agent} />
       <Channel2 agent={agent} />
