@@ -37,14 +37,32 @@ export type Vaettir<
   API extends TDefaultAPI,
   Channels extends TDefaultChannels,
 > = {
+  /**
+   * Symbolic representation of predefined ID
+   */
   id: symbol;
+  /**
+   * Contains predefined event emitters
+   */
   channels: Channels;
+  /**
+   * User's exposed API
+   */
   api: API;
-} & Omit<Destruction, "onDestroy">;
+  /**
+   * Destroys the agent
+   */
+  destroy: Destruction["destroy"];
+  /**
+   * @returns `true` if the agent is destroyed
+   */
+  isDestroyed: Destruction["isDestroyed"];
+  /**
+   * Promise that resolves when the agent is destroyed
+   */
+  whenDestroyed: Destruction["whenDestroyed"];
+};
 
-/**
- * Tooling for actor creation and communication
- */
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export namespace Vaettir {
   export type DefaultAPI = TDefaultAPI;
@@ -54,13 +72,53 @@ export namespace Vaettir {
     API extends DefaultAPI,
     Channels extends DefaultChannels,
   > = {
+    /**
+     * Define internal data and external API
+     * @example
+     * Vaettir
+     *  .build()
+     *  .api(() => {
+     *    const internalData = {}
+     *    const internalFn = () => {}
+     *    const externalFn = () => {}
+     *    return { externalFn }
+     *  })
+     */
     api: <NewAPI extends DefaultAPI>(
       fn: (input: AgentAPIDefinerParam<API, Channels>) => NewAPI,
     ) => AgentBuilder<NewAPI, Channels>;
+    /**
+     * Define extra channels for specific purposes
+     * @example
+     * import { Vaettir, Obs } from "vaettir-react"
+     *
+     * Vaettir
+     *  .build()
+     *  .channels(channels => ({
+     *    ...channels, // must be done to copy the default change channel
+     *    onNameChange: Obs.make<string>()
+     *  }))
+     */
     channels: <NewChannels extends Channels>(
       fn: (channels: Channels) => NewChannels,
     ) => AgentBuilder<API, NewChannels>;
+    /**
+     * Provide a string to be wrapped into the Agent's Symbolic ID.
+     * This is usually used for debugging purpose.
+     */
     id: (id: string) => AgentBuilder<API, Channels>;
+    /**
+     * Finalize the build process
+     * @example
+     * import { Vaettir, Obs } from "vaettir-react"
+     *
+     * Vaettir
+     *  .build()
+     *  .api(() => ({
+     *    // some api definitions
+     *  }))
+     *  .finish()
+     */
     finish: () => Vaettir<API, Channels>;
   };
 
@@ -113,6 +171,42 @@ export namespace Vaettir {
     };
   };
 
+  /**
+   * Starts a Vaettir agent's build process.
+   *
+   * @example
+   *
+   * const agent = Vaettir
+   *  .build()
+   *  .api(({
+   *    prev,
+   *    channels,
+   *    onDestroy, // register
+   *    isDestroyed,  // returns true
+   *  }) => {
+   *      // define variables internally
+   *      const internalData = {};
+   *
+   *      // define methods
+   *      const get = () => {}
+   *      const set = (input: unknown) => {
+   *        channels.change.emit() // signal change to external subscribers
+   *      }
+   *
+   *      cosnt unsubscribe = globals.events.subscribeToSomething((x) => set(x));
+   *      onDestroy(() => unsubscribe())  // register functions to be called when the agent is destroyed
+   *
+   *      (async () => {
+   *        while(!isDestroyed()) {  // run perpetual work until the agent is destroyed
+   *          await sleep(1000)
+   *        }
+   *      })();
+   *
+   *      // expose methods
+   *      return { get, set }
+   *  })
+   *  .finish()
+   */
   export const build = () =>
     makeBuilderImpl<DefaultAPI, DefaultChannels>({
       api: {},
