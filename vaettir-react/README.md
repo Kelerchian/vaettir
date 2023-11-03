@@ -4,21 +4,27 @@ A turing-complete agent that manage your state.
 
 ## Philosophy
 
-State management in React has always been passive, such as state machine or actor model.
-Passive object is a simple concept but it doesn't scale with complexity.
-As software grows in complexity, the required active computations take the form of business logic and control flow scattered across the codebase, making a single flow hard to track.
-In addition to that, this scattered business logic will eventually coincide with React component lifecycle management, making both hard to synchronize.
+The existing passive state management in the React ecosystem is simple until it explodes in complexity compared to the application's complexity.
+Passive state management relies on the fact that it reacts to an input or a signal--e.g. a dispatch, a method call.
+Most passive state management APIs are modelled after a sub turing-complete language constructs (e.g. state machine, actor model), making it hard to use to model turing-complete processes.
+Moreover, because of its passiveness, it is very hard to manage concurrent asynchronous operations acted upon it without modifying the state structure.
 
-On the other hand, Agent object can create output in absence of input and can receive input without outputting.
+An agent is a turing-complete and concurrent construct--a self executing object.
+It can both react to inputs and act without.
+Managing concurrent control flow from external parties is simpler.
 Think of a mini server running inside your application.
 
-Vaettir provides TypeScript API to easily create agents, manage its lifetime, and link it to React components.
-This allows authoring complex business logic that is decoupled from React lifecycle management.
+Vaettir-React provides API to design agents that:
+
+- can be linked to React's component lifetime
+- can flexibly signal changes to trigger React's component re-render
+
+This results in a loose-coupling with React component without extra hassle, making both the agent and the components easy to refactor.
 
 ## Basics
 
-Imagine a component that needs a periodical update.
-With Vaettir, it can be easily written as an agent with an async loop that stops on the agent's destruction.
+Imagine an imaginary scenario: a react component that updates periodically.
+It is easily written in Vaettir as an agent containing an async loop.
 
 ```tsx
 import { VaettirReact } from "vaettir-react";
@@ -55,11 +61,13 @@ const AutomaticDataUpdater = (url: string) =>
     .finish();
 ```
 
-Internal data is exposed to external party, which allows the agent to have total control of its own data encapsulation.
+The agent has an internal async loop which updates every 10 seconds until the agent is destroyed.
+It also exposes a function to view its internal `data.posts` simply via the `return` keyword.
+This is simply just a typed [closure](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures).
 
-In the React component, instantiate, "use", and "own" the agent.
-"Using" an agent means that whenever it emits a change event (from calling `channels.change.emit()`), the React component will re-render.
-"Owning" an agent means binding its lifetime to the component's--the agent will be destroyed when the component is unmounted or if there's a change in the dependency array (similar to `useEffect`).
+From the React Component's side, we can control how long an agent lives.
+A React component can "own" an agent; when the component is mounted and unmounted, it will respectively create and destroy the agent.
+An owning component automatically re-render when detecting changes from the agent, signaled by the call to `channels.change.emit()`.
 
 ```tsx
 import * as React from "react";
@@ -71,7 +79,8 @@ const SomeComponent = ({ url }: { url: string }) => {
 };
 ```
 
-React components can receive unowned agents and subscribe to its changes by calling `VaettirReact.use`--effectively sharing exposed APis with the agent's owner.
+React components can receive an agent from its props--an unowned agent.
+Calling `VaettirReact.use(agent)` will make the React component re-render when the agent signals a change.
 
 ```tsx
 import * as React from "react";
@@ -83,23 +92,35 @@ const PostCount = ({ agent }: { agent: AutomaticDataUpdater }) => {
 };
 ```
 
+Sharing agents between React components effectively shares its exposed APIs.
+This allows components to communicate between each other through the agent.
+
 ## Context
 
-Vaettir-React also comes with context toolings to easily distributed Vaettir agents within a scope.
+Vaettir-React comes with toolings to distribute agents via React context.
+The context works exactly like React context with a similar but more precise API.
 
 ```tsx
+// defined in a separate module
+export const AutomaticDataUpdater = (url: string) =>
+  Vaettir.build()
+    .api(() => {
+      // internal implementation
+      return {};
+    })
+    .finish();
 export const AutomaticDataUpdaterContext =
   VaettirReact.Context.make<AutomaticDataUpdater>();
 ```
 
-The context works exactly like React context with a similar but more precise API.
+Agents are injected into the context by passing it through `<Context.Provide value={agent}>`;
 
 ```tsx
 import { AutomaticDataUpdaterContext } from "some/path";
 
 export const RootComponent = () => {
   const agent = VaettirReact.useOwned(() =>
-    AutomaticDataUpdate(SOME_URL),
+    AutomaticDataUpdater(SOME_URL),
   );
 
   return (
@@ -110,7 +131,7 @@ export const RootComponent = () => {
 };
 ```
 
-Underneath the provided context, any components can use the agent like so:
+Under the provided context, any components can use the agent by calling `Context.use()`.
 
 ```tsx
 import { AutomaticDataUpdaterContext } from "some/path";
