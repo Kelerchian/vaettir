@@ -1,6 +1,6 @@
 {
   "name": "vaettir-react",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "main": "./dist/commonjs/index.js",
   "files": [
@@ -18,7 +18,8 @@
     "lint:fix": "npm run lint -- --fix",
     "prepublishOnly": "npm run dist"
   },
-  "author": "",
+  "homepage": "https://github.com/Kelerchian/vaettir/tree/master/vaettir-react",
+  "author": "Alan Darmasaputra <kelerchian@gmail.com> (https://valand.dev/)",
   "license": "MIT",
   "description": "",
   "peerDependencies": {
