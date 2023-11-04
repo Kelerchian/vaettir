@@ -21,6 +21,14 @@ Vaettir-React provides API to design agents that:
 
 This results in a loose-coupling with React component without extra hassle, making both the agent and the components easy to refactor.
 
+## Demo
+
+[A snake game on canvas and UI modelled with agents.](/examples/6-snake-demo/)
+
+Check out how the snake game is modelled in agent and structured in a convenient way.
+
+![If the image doesn't render, go straight to the readme page](./docs/snake.gif)
+
 ## Basics
 
 Imagine an imaginary scenario: a react component that updates periodically.
