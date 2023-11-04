@@ -2,7 +2,7 @@
 
 A turing-complete agent that manage your state.
 
-## Philosophy
+## Driving Philosophy
 
 The existing passive state management in the React ecosystem is simple until it explodes in complexity compared to the application's complexity.
 Passive state management relies on the fact that it reacts to an input or a signal--e.g. a dispatch, a method call.
