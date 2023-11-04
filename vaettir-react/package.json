@@ -1,6 +1,6 @@
 {
   "name": "vaettir-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "main": "./dist/commonjs/index.js",
   "files": [
@@ -23,10 +23,6 @@
   "description": "",
   "peerDependencies": {
     "react": "^18.2.0"
-  },
-  "dependencies": {
-    "systemic-ts-utils": "^0.2.1",
-    "vaettir": "^0.1.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
@@ -65,5 +61,9 @@
       }
     }
   },
-  "types": "./dist/commonjs/index.d.ts"
+  "types": "./dist/commonjs/index.d.ts",
+  "dependencies": {
+    "systemic-ts-utils": "^0.2.2",
+    "vaettir": "^0.1.3"
+  }
 }
