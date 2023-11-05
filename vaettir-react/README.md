@@ -1,20 +1,23 @@
-# Vaettir-React
+# [Vaettir-React](https://github.com/Kelerchian/vaettir/tree/master/vaettir-react)
 
 A turing-complete agent that manage your state.
 
+```
+npm install vaettir-react
+```
+
 ## Driving Philosophy
 
-The existing passive state management in the React ecosystem is simple until it explodes in complexity compared to the application's complexity.
-Passive state management relies on the fact that it reacts to an input or a signal--e.g. a dispatch, a method call.
-Most passive state management APIs are modelled after a sub turing-complete language constructs (e.g. state machine, actor model), making it hard to use to model turing-complete processes.
-Moreover, because of its passiveness, it is very hard to manage concurrent asynchronous operations acted upon it without modifying the state structure.
+The existing passive state management libraries needs a input (e.g. dispatch, method call) to work.
+Being a sub-turing-complete language constructs (e.g. state machine, actor model) makes it hard to model turing-complete processes like managing concurrent asynchronous calls from many React components.
+It doesn't scale to certain complexity, making it hard to maintain above certain threshold.
 
 An agent is a turing-complete and concurrent construct--a self executing object.
 It can both react to inputs and act without.
 Managing concurrent control flow from external parties is simpler.
 Think of a mini server running inside your application.
 
-Vaettir-React provides API to design agents that:
+Vaettir-React provides API that allows developers to design agents that:
 
 - can be linked to React's component lifetime
 - can flexibly signal changes to trigger React's component re-render
@@ -27,7 +30,7 @@ This results in a loose-coupling with React component without extra hassle, maki
 
 Check out how the snake game is modelled in agent and structured in a convenient way.
 
-![If the image doesn't render, go straight to the readme page](./docs/snake.gif)
+![If the image doesn't render, go straight to the github page](./docs/snake.gif)
 
 ## Basics
 
