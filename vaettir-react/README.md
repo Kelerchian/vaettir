@@ -24,6 +24,10 @@ Vaettir-React provides API that allows developers to design agents that:
 
 This results in a loose-coupling with React component without extra hassle, making both the agent and the components easy to refactor.
 
+### Accompanying Library
+
+Vaettir depends on and works well with [systemic-ts-utils](https://github.com/Kelerchian/systemic-ts-utils).
+
 ## Demo
 
 [A snake game on canvas and UI modelled with agents.](/examples/6-snake-demo/)
