@@ -1,11 +1,10 @@
 {
   "name": "vaettir-react",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "main": "./dist/commonjs/index.js",
   "files": [
-    "dist",
-    "docs/snake.gif"
+    "dist"
   ],
   "scripts": {
     "dev:prepare": "cd ../vaettir && npm link && npm run clean && npm ci && npm run build",

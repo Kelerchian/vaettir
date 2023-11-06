@@ -17,10 +17,8 @@ It can both react to inputs and act without.
 Managing concurrent control flow from external parties is simpler.
 Think of a mini server running inside your application.
 
-Vaettir-React provides API that allows developers to design agents that:
-
-- can be linked to React's component lifetime
-- can flexibly signal changes to trigger React's component re-render
+Vaettir-React's API allows developers to write agents that [inverse the control](https://en.wikipedia.org/wiki/Inversion_of_control) from React component. The agent has full control over data and internal process, selective re-render timing, while being optionally bound to React component's lifetime.
+Its state management capability is a subset of the above traits.
 
 This results in a loose-coupling with React component without extra hassle, making both the agent and the components easy to refactor.
 
