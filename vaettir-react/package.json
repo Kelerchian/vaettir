@@ -1,6 +1,6 @@
 {
   "name": "vaettir-react",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "main": "./dist/commonjs/index.js",
   "files": [
@@ -23,7 +23,7 @@
   "license": "MIT",
   "description": "",
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": "17 - 18"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
