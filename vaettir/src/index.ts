@@ -1,8 +1,7 @@
 import { Destruction } from "systemic-ts-utils/destruction";
 import { Obs } from "systemic-ts-utils/obs";
-
-export { Destruction };
-export { Obs };
+export { Destruction } from "systemic-ts-utils/destruction";
+export { Obs } from "systemic-ts-utils/obs";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type TDefaultAPI = {};

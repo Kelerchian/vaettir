@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState, useContext, createContext, useMemo } from "react";
 import { Vaettir, Obs } from "vaettir";
-export { Vaettir, Obs } from "vaettir";
+export { Vaettir, Obs, Destruction } from "vaettir";
 
 export namespace VaettirReact {
   const DEFAULT_SYMBOL = Symbol();
